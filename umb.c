@@ -10,8 +10,7 @@ void withdraw();
 void close();
 void send();
 
-typedef struct Node
-{
+typedef struct Node{
 
     int id_no;
     char name[60];
@@ -20,17 +19,21 @@ typedef struct Node
     float taka;
     struct Node *next;
 
-} node;
+}node;
 
-node *root = NULL, *head = NULL, *use = NULL, *ser = NULL, *sign = NULL, *rsign = NULL, *transaction = NULL, *receiver = NULL;
+node *root=NULL, *head=NULL, *use=NULL, *ser=NULL, *sign=NULL, *rsign=NULL, *transaction=NULL, *receiver=NULL;
 
-int mexit, userid, usersecu, f = 0;
-char receivername[60];
+int mexit, userid, usersecu, f=0;
+char receivername [60];
+
+
 
 int headid, headsecu;
-char headname[60], receivername[60];
+char headname [60], receivername [60];
 long long headphone;
 float headtaka;
+
+
 
 void menu(void)
 {
@@ -60,7 +63,8 @@ main_menu:
     }
 }
 
-void new_acc(node *ser, node *head)
+
+void new_acc(node* ser, node* head)
 {
     use = root;
     ser = root;
@@ -75,12 +79,13 @@ account_no:
 
     ser = ser->next;
 
-    while (ser != NULL)
+
+    while (ser!=NULL)
     {
         if (userid == ser->id_no)
         {
             printf("\n\t\tID no. already in use!\n");
-        press:
+press:
             printf("\n\n\n\t\tPress 0 to exit.\n\t\tPress 1 to go to main menu.\n\t\tPress 2 to try again.\n\t\t---> ");
             scanf("%d", &mexit);
             system("cls");
@@ -89,38 +94,40 @@ account_no:
             else if (mexit == 2)
                 goto account_no;
             else if (mexit == 0)
-                close();
+                 close();
             else
             {
                 printf("\n\t\tInvalid!\a");
                 goto press;
+
             }
+
         }
 
         ser = ser->next;
     }
 
-    head->next = (node *)malloc(sizeof(node));
-    head = head->next;
+    head->next=(node*)malloc(sizeof(node));
+    head=head->next;
 
     head->id_no = userid;
 
 correct:
 
     printf("\n\t\tEnter the username(NO SPACE): ");
-    scanf("%s", head->name);
+    scanf("%s",head->name);
     printf("\n\t\tEnter the Security PIN: :");
     scanf("%d", &head->secu);
     printf("\n\t\tEnter the phone number: (+880) ");
     scanf("%lld", &head->phone);
 
     system("cls");
-    printf("\n\n\t\t\t\t===== ACCOUNT DETAILS =====\n\n\t\t\tID: %d\n\t\t\tUsername: %s\n\t\t\tSecurity PIN: %d\n\t\t\tPhone number: +880%lld\n\n\t\t\t CONFIRM?\n", head->id_no, head->name, head->secu, head->phone);
-y_n:
-    printf("\n\t\t\tEnter 'yes' or 'no'\n\t\t\t--->  ");
-    scanf("%s", conf);
+    printf ("\n\n\t\t\t\t===== ACCOUNT DETAILS =====\n\n\t\t\tID: %d\n\t\t\tUsername: %s\n\t\t\tSecurity PIN: %d\n\t\t\tPhone number: +880%lld\n\n\t\t\t CONFIRM?\n",head->id_no,head->name,head->secu,head->phone);
+  y_n:
+    printf ("\n\t\t\tEnter 'yes' or 'no'\n\t\t\t--->  ");
+    scanf("%s",conf);
 
-    if ((strcmp(conf, "yes") == 0) || (strcmp(conf, "YES") == 0))
+    if ((strcmp(conf,"yes")==0) || (strcmp(conf,"YES")==0))
     {
         printf("\n\n\t\tEnter Initial deposit in BDT: ");
         scanf("%f", &head->taka);
@@ -143,8 +150,9 @@ y_n:
 
         fclose(ptr);
         printf("\n\t\tAccount created successfully!\n");
+
     }
-    else if ((strcmp(conf, "no") == 0) || (strcmp(conf, "NO") == 0))
+    else if ((strcmp(conf,"no")==0) || (strcmp(conf,"NO")==0))
     {
         goto correct;
     }
@@ -168,18 +176,19 @@ use_invalid:
         goto use_invalid;
     }
 
-} //DONEEEEEEEEEEEE
+}//DONEEEEEEEEEEEE
+
 
 void depo(int userid)
 {
-    float transactiontaka = 0;
+    float transactiontaka=0;
     printf("\n\n\t\tEnter the amount you want to deposit (BDT) : ");
     scanf("%f", &transactiontaka);
 
     sign = root;
     sign = sign->next;
 
-    while (sign != NULL)
+    while (sign!=NULL)
     {
         if (sign->id_no == userid)
         {
@@ -200,80 +209,89 @@ void depo(int userid)
         sign = sign->next;
     }
 
-    node *transaction = NULL, *temp = NULL;
 
-    transaction = (node *)malloc(sizeof(node));
+    node *transaction=NULL, *temp=NULL;
 
-    transaction->id_no = sign->id_no;
-    strcpy(transaction->name, sign->name);
-    transaction->secu = sign->secu;
-    transaction->phone = sign->phone;
-    transaction->taka = sign->taka + transactiontaka;
+    transaction = (node*)malloc(sizeof(node));
 
-    ser = root;
 
-    if (root->next->id_no != sign->id_no)
-    {
-        ser = ser->next;
-    }
+            transaction->id_no = sign->id_no;
+            strcpy(transaction->name, sign->name);
+            transaction->secu = sign->secu;
+            transaction->phone = sign->phone;
+            transaction->taka = sign->taka + transactiontaka;
 
-    while (ser != NULL)
-    {
-        if (ser->next->id_no == userid)
-        {
-            break;
-        }
-        ser = ser->next;
-    }
+
+
+            ser = root;
+
+            if (root->next->id_no != sign->id_no)
+            {
+                ser = ser->next;
+            }
+
+            while (ser!=NULL)
+            {
+                 if (ser->next->id_no == userid)
+                {
+                    break;
+                }
+                ser = ser->next;
+            }
 
     //Deletion of the node
-    temp = ser->next;
-    ser->next = temp->next;
-    free(temp);
+            temp = ser->next;
+            ser->next = temp->next;
+            free (temp);
 
     //Addition of the new node to that place
-    transaction->next = ser->next;
-    ser->next = transaction;
+            transaction->next = ser->next;
+            ser->next = transaction;
 
-    //replacing the file
+//replacing the file
     FILE *newrec;
     newrec = fopen("new.dat", "a+");
 
-    use = root;
-    use = use->next;
 
-    while (use != NULL)
-    {
-        fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
-        //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
+           use = root;
+           use = use->next;
 
-        use = use->next;
-    }
+        while(use!=NULL)
+        {
+            fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+            //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
 
-    printf("\n\n\t\tDeposit successful!");
-    fclose(newrec);
-    remove("database.dat");
-    rename("new.dat", "database.dat");
+            use = use->next;
+        }
 
-    printf("\n\t\tEnter 1 to go to main menu.\n\t\tEnter 0 to exit.\n\t\t---> ");
-    scanf("%d", &mexit);
-    system("cls");
-    if (mexit == 1)
-        menu2();
-    else
-        close();
+            printf("\n\n\t\tDeposit successful!");
+            fclose(newrec);
+            remove("database.dat");
+            rename("new.dat", "database.dat");
+
+
+
+        printf("\n\t\tEnter 1 to go to main menu.\n\t\tEnter 0 to exit.\n\t\t---> ");
+        scanf("%d", &mexit);
+        system("cls");
+        if (mexit == 1)
+            menu2();
+        else
+            close();
+
+
 }
 
 void withdraw(int userid)
 {
-    float transactiontaka = 0;
+    float transactiontaka=0;
     printf("\n\n\t\tEnter the amount you want to withdraw (BDT) : ");
     scanf("%f", &transactiontaka);
 
     sign = root;
     sign = sign->next;
 
-    while (sign != NULL)
+    while (sign!=NULL)
     {
         if (sign->id_no == userid)
         {
@@ -294,100 +312,110 @@ void withdraw(int userid)
         sign = sign->next;
     }
 
-    node *transaction = NULL, *temp = NULL;
 
-    transaction = (node *)malloc(sizeof(node));
+    node *transaction=NULL, *temp=NULL;
 
-    transaction->id_no = sign->id_no;
-    strcpy(transaction->name, sign->name);
-    transaction->secu = sign->secu;
-    transaction->phone = sign->phone;
+    transaction = (node*)malloc(sizeof(node));
 
-    if (transactiontaka > sign->taka)
-    {
-        printf("\n\n\t\tNOT ENOUGH BALANCE!!\n\n");
-    with_invalid:
-        printf("\n\n\n\t\tEnter 0 to try again.\n\t\tEnter 1 to return to menu.\n\t\tEnter 2 to exit.\n\t\t---> ");
-        scanf("%d", &mexit);
-        system("cls");
-        if (mexit == 0)
-            withdraw(userid);
-        else if (mexit == 1)
-            menu2();
-        else if (mexit == 2)
-            close();
-        else
-        {
-            printf("\n\t\tInvalid!");
-            goto with_invalid;
-        }
-    }
-    else
-    {
-        transaction->taka = sign->taka - transactiontaka;
-    }
 
-    ser = root;
+            transaction->id_no = sign->id_no;
+            strcpy(transaction->name, sign->name);
+            transaction->secu = sign->secu;
+            transaction->phone = sign->phone;
 
-    if (root->next->id_no != sign->id_no)
-    {
-        ser = ser->next;
-    }
 
-    while (ser != NULL)
-    {
-        if (ser->next->id_no == userid)
-        {
-            break;
-        }
-        ser = ser->next;
-    }
+            if (transactiontaka > sign->taka)
+            {
+                printf("\n\n\t\tNOT ENOUGH BALANCE!!\n\n");
+with_invalid:
+                printf("\n\n\n\t\tEnter 0 to try again.\n\t\tEnter 1 to return to menu.\n\t\tEnter 2 to exit.\n\t\t---> ");
+                scanf("%d", &mexit);
+                system("cls");
+                if (mexit == 0)
+                    withdraw(userid);
+                else if (mexit == 1)
+                    menu2();
+                else if (mexit == 2)
+                    close();
+                else
+                {
+                    printf("\n\t\tInvalid!");
+                    goto with_invalid;
+                }
+            }
+            else
+            {
+                transaction->taka = sign->taka - transactiontaka;
+            }
+
+
+            ser = root;
+
+            if (root->next->id_no != sign->id_no)
+            {
+                ser = ser->next;
+            }
+
+            while (ser!=NULL)
+            {
+                 if (ser->next->id_no == userid)
+                {
+                    break;
+                }
+                ser = ser->next;
+            }
 
     //Deletion of the node
-    temp = ser->next;
-    ser->next = temp->next;
-    free(temp);
+            temp = ser->next;
+            ser->next = temp->next;
+            free (temp);
 
     //Addition of the new node to that place
-    transaction->next = ser->next;
-    ser->next = transaction;
+            transaction->next = ser->next;
+            ser->next = transaction;
 
-    //replacing the file
+//replacing the file
     FILE *newrec;
     newrec = fopen("new.dat", "a+");
 
-    use = root;
-    use = use->next;
 
-    while (use != NULL)
-    {
-        fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
-        //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
+           use = root;
+           use = use->next;
 
-        use = use->next;
-    }
+        while(use!=NULL)
+        {
+            fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+            //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
 
-    printf("\n\n\t\tWithdraw successful!");
-    fclose(newrec);
-    remove("database.dat");
-    rename("new.dat", "database.dat");
+            use = use->next;
+        }
 
-    printf("\n\t\tEnter 1 to go to main menu.\n\t\tEnter 0 to exit.\n\t\t---> ");
-    scanf("%d", &mexit);
-    system("cls");
-    if (mexit == 1)
-        menu2();
-    else
-        close();
+            printf("\n\n\t\tWithdraw successful!");
+            fclose(newrec);
+            remove("database.dat");
+            rename("new.dat", "database.dat");
+
+
+
+        printf("\n\t\tEnter 1 to go to main menu.\n\t\tEnter 0 to exit.\n\t\t---> ");
+        scanf("%d", &mexit);
+        system("cls");
+        if (mexit == 1)
+            menu2();
+        else
+            close();
+
 }
 
-void send(int userid)
+void send (int userid)
 {
     int receiverid;
 
-    node *transaction = NULL, *receiver = NULL, *temp = NULL, *rtemp = NULL, *rsign = NULL;
+    node *transaction=NULL, *receiver=NULL, *temp=NULL, *rtemp=NULL, *rsign=NULL;
 
-    float transactiontaka = 0;
+    float transactiontaka=0;
+
+
 
 rsignid:
 
@@ -400,11 +428,11 @@ invname:
     rsign = root;
     rsign = rsign->next;
 
-    while (rsign != NULL)
+    while (rsign!=NULL)
     {
         if (rsign->id_no == receiverid)
         {
-            if (strcmp(rsign->name, receivername) == 0)
+            if (strcmp(rsign->name, receivername)==0)
             {
                 break;
             }
@@ -419,19 +447,20 @@ invname:
 
     if (rsign == NULL)
     {
-        printf("\n\t\tID does not exist!!");
+        printf ("\n\t\tID does not exist!!");
         goto rsignid;
     }
 
-    //======================================================sender upd========================
+//======================================================sender upd========================
 
     printf("\n\n\t\tEnter the amount (BDT) : ");
     scanf("%f", &transactiontaka);
 
+
     sign = root;
     sign = sign->next;
 
-    while (sign != NULL)
+    while (sign!=NULL)
     {
         if (sign->id_no == userid)
         {
@@ -452,166 +481,177 @@ invname:
         sign = sign->next;
     }
 
-    transaction = (node *)malloc(sizeof(node));
+    transaction = (node*)malloc(sizeof(node));
 
-    transaction->id_no = sign->id_no;
-    strcpy(transaction->name, sign->name);
-    transaction->secu = sign->secu;
-    transaction->phone = sign->phone;
 
-    if (transactiontaka > sign->taka)
-    {
-        printf("\n\n\t\tNOT ENOUGH BALANCE!!\n\n");
-    withd_invalid:
-        printf("\n\n\n\t\tEnter 0 to try again.\n\t\tEnter 1 to return to menu.\n\t\tEnter 2 to exit.\n\t\t---> ");
-        scanf("%d", &mexit);
-        system("cls");
-        if (mexit == 0)
-            send(userid);
-        else if (mexit == 1)
-            menu2();
-        else if (mexit == 2)
-            close();
-        else
-        {
-            printf("\n\t\tInvalid!");
-            goto withd_invalid;
-        }
-    }
-    else
-    {
-        transaction->taka = sign->taka - transactiontaka;
-    }
+            transaction->id_no = sign->id_no;
+            strcpy(transaction->name, sign->name);
+            transaction->secu = sign->secu;
+            transaction->phone = sign->phone;
 
-    ser = root;
-    if (root->next->id_no != sign->id_no)
-    {
-        ser = ser->next;
-    }
+            if (transactiontaka > sign->taka)
+            {
+                printf("\n\n\t\tNOT ENOUGH BALANCE!!\n\n");
+withd_invalid:
+                printf("\n\n\n\t\tEnter 0 to try again.\n\t\tEnter 1 to return to menu.\n\t\tEnter 2 to exit.\n\t\t---> ");
+                scanf("%d", &mexit);
+                system("cls");
+                if (mexit == 0)
+                    send(userid);
+                else if (mexit == 1)
+                    menu2();
+                else if (mexit == 2)
+                    close();
+                else
+                {
+                    printf("\n\t\tInvalid!");
+                    goto withd_invalid;
+                }
+            }
+            else
+            {
+                transaction->taka = sign->taka - transactiontaka;
+            }
 
-    while (ser != NULL)
-    {
-        if (ser->next->id_no = userid)
-        {
-            break;
-        }
-        ser = ser->next;
-    }
+
+            ser = root;
+            if (root->next->id_no != sign->id_no )
+            {
+                ser = ser->next;
+            }
+
+            while (ser!=NULL)
+            {
+                 if (ser->next->id_no = userid)
+                {
+                    break;
+                }
+                ser = ser->next;
+            }
 
     //Deletion of the node
-    temp = ser->next;
-    ser->next = temp->next;
-    free(temp);
+            temp = ser->next;
+            ser->next = temp->next;
+            free (temp);
 
     //Addition of the new node to that place
-    if (ser != NULL)
-    {
-        transaction->next = ser->next;
-        ser->next = transaction;
-    }
-    else if (ser == NULL)
-    {
-        ser->next = transaction;
-    }
+            if (ser!=NULL)
+            {
+                transaction->next = ser->next;
+                ser->next = transaction;
+            }
+            else if (ser==NULL)
+            {
+                ser->next = transaction;
+            }
+
 
     FILE *newrec;
     newrec = fopen("new.dat", "a+");
 
-    use = root;
-    use = use->next;
 
-    while (use != NULL)
-    {
-        fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+           use = root;
+           use = use->next;
 
-        use = use->next;
-    }
-    fclose(newrec);
-    remove("database.dat");
-    rename("new.dat", "database.dat");
-
-    //==================================================================================receiver upd=============================
-
-    receiver = (node *)malloc(sizeof(node));
-
-    receiver->id_no = rsign->id_no;
-    strcpy(receiver->name, rsign->name);
-    receiver->secu = rsign->secu;
-    receiver->phone = rsign->phone;
-    receiver->taka = rsign->taka + transactiontaka;
-
-    ser = root;
-
-    if (root->next->id_no != rsign->id_no)
-    {
-        ser = ser->next;
-    }
-
-    while (ser != NULL)
-    {
-        if (ser->next->id_no = receiverid)
+        while(use!=NULL)
         {
-            break;
+            fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+
+            use = use->next;
         }
-        ser = ser->next;
-    }
+            fclose(newrec);
+            remove("database.dat");
+            rename("new.dat", "database.dat");
+
+//==================================================================================receiver upd=============================
+
+
+    receiver = (node*)malloc(sizeof(node));
+
+
+            receiver->id_no = rsign->id_no;
+            strcpy(receiver->name, rsign->name);
+            receiver->secu = rsign->secu;
+            receiver->phone = rsign->phone;
+            receiver->taka = rsign->taka + transactiontaka;
+
+
+
+            ser = root;
+
+            if (root->next->id_no != rsign->id_no )
+            {
+                ser = ser->next;
+            }
+
+            while (ser!=NULL)
+            {
+                 if (ser->next->id_no = receiverid)
+                {
+                    break;
+                }
+                ser = ser->next;
+            }
 
     //Deletion of the node
-    rtemp = ser->next;
-    ser->next = rtemp->next;
-    free(rtemp);
+            rtemp = ser->next;
+            ser->next = rtemp->next;
+            free (rtemp);
 
     //Addition of the new node to that place
-    if (ser != NULL)
-    {
-        receiver->next = ser->next;
-        ser->next = receiver;
-    }
-    else if (ser == NULL)
-    {
-        ser->next = receiver;
-    }
+            if (ser!=NULL)
+            {
+                receiver->next = ser->next;
+                ser->next = receiver;
+            }
+            else if (ser==NULL)
+            {
+                ser->next = receiver;
+            }
 
-    //replacing the file
+//replacing the file
     newrec = fopen("new.dat", "a+");
 
-    use = root;
-    use = use->next;
 
-    while (use != NULL)
-    {
-        fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
-        //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
+           use = root;
+           use = use->next;
 
-        use = use->next;
-    }
+        while(use!=NULL)
+        {
+            fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+            //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
 
-    printf("\n\n\t\tTransaction successful!");
-    fclose(newrec);
-    remove("database.dat");
-    rename("new.dat", "database.dat");
+            use = use->next;
+        }
 
-    printf("\n\t\tEnter 1 to go to main menu.\n\t\tEnter 0 to exit.\n\t\t---> ");
-    scanf("%d", &mexit);
-    system("cls");
-    if (mexit == 1)
-        menu2();
-    else
-        close();
+            printf("\n\n\t\tTransaction successful!");
+            fclose(newrec);
+            remove("database.dat");
+            rename("new.dat", "database.dat");
+
+        printf("\n\t\tEnter 1 to go to main menu.\n\t\tEnter 0 to exit.\n\t\t---> ");
+        scanf("%d", &mexit);
+        system("cls");
+        if (mexit == 1)
+            menu2();
+        else
+            close();
+
 }
 
 void see(userid)
 {
     system("cls");
 
+
     FILE *ptr;
     ptr = fopen("database.dat", "a+");
 
-    while (fscanf(ptr, "%d %s %d %lld %f", &headid, headname, &headsecu, &headphone, &headtaka) != EOF)
+    while( fscanf ( ptr, "%d %s %d %lld %f", &headid, headname, &headsecu, &headphone, &headtaka) != EOF )
     {
         if (headid == userid)
         {
-            printf("\n\t\t\t==== ACCOUNT STATEMENT ====\n\n\t\tID : %d\n\t\tName: %s\n\t\tPIN: %d\n\t\tPhone number : 0%lld\n\t\tAccount Balance : %g (BDT)\n\n", headid, headname, headsecu, headphone, headtaka);
+            printf("\n\t\t\t==== ACCOUNT STATEMENT ====\n\n\t\tID : %d\n\t\tName: %s\n\t\tPIN: %d\n\t\tPhone number : 0%lld\n\t\tAccount Balance : %g (BDT)\n\n",headid, headname, headsecu, headphone, headtaka);
 
             break;
         }
@@ -637,14 +677,15 @@ void see(userid)
 
 void close(void)
 {
-    printf("\n\n\n\n\t\t\tProject By BinaryPoets\n");
-    printf("\n\t\tLamia Tabassum       203014019");
-    printf("\n\t\tNur Hasan Masum      203014011");
-    printf("\n\t\tFardeen Ameen Pranto 203014022");
-    printf("\n\t\tAbrar Saief          203014020\n\n\n");
+    printf("\n\n\n\nProject By\n");
+    printf("\nLamia Tabassum       203014019");
+    printf("\nNur Hasan Masum      203014011");
+    printf("\nFardeen Ameen Pranto 203014022");
+    printf("\nAbrar Saief          203014020\n\n\n");
 
     exit(0);
 }
+
 
 void signin(void)
 {
@@ -657,9 +698,10 @@ void signin(void)
     printf("\n\n\t\t\tEnter Your ID : ");
     scanf("%d", &userid);
 
+
     sign = sign->next;
 
-    while (sign != NULL)
+    while (sign!=NULL)
     {
         if (sign->id_no == userid)
         {
@@ -675,7 +717,7 @@ void signin(void)
             else
             {
                 printf("\n\t\t\tWrong Pin!!");
-            press1:
+press1:
                 printf("\n\n\n\t\t\tPress 0 to exit.\n\t\t\tPress 1 to goto main menu.\n\t\t\tPress 2 to try again.\n\t\t\t---> ");
                 scanf("%d", &mexit);
                 system("cls");
@@ -689,32 +731,35 @@ void signin(void)
                 {
                     printf("\n\t\t\tInvalid!\a");
                     goto press1;
+
                 }
+
             }
         }
 
         sign = sign->next;
     }
 
+
     if (flag != 1)
     {
         printf("\n\t\t\tID not found!!\n\n");
 
-    press2:
-        printf("\n\n\n\t\t\tPress 0 to exit.\n\t\t\tPress 1 to go to main menu.\n\t\t\tPress 2 to try again.\n\t\t\t---> ");
-        scanf("%d", &mexit);
-        system("cls");
-        if (mexit == 1)
-            main();
-        else if (mexit == 2)
-            signin();
-        else if (mexit == 0)
-            close();
-        else
-        {
-            printf("\n\t\t\tInvalid!\a");
-            goto press2;
-        }
+press2:
+            printf("\n\n\n\t\t\tPress 0 to exit.\n\t\t\tPress 1 to go to main menu.\n\t\t\tPress 2 to try again.\n\t\t\t---> ");
+            scanf("%d", &mexit);
+            system("cls");
+            if (mexit == 1)
+                main();
+            else if (mexit == 2)
+                signin();
+            else if (mexit == 0)
+                close();
+            else
+            {
+                printf("\n\t\t\tInvalid!\a");
+                goto press2;
+            }
     }
 }
 
@@ -726,22 +771,23 @@ int main()
     FILE *ptr;
     ptr = fopen("database.dat", "a+");
 
-    head = (node *)malloc(sizeof(node));
+    head=(node*)malloc(sizeof(node));
     head->next = NULL;
     root = head;
     ser = root;
     use = root;
 
-    while (fscanf(ptr, "%d %s %d %lld %f", &headid, headname, &headsecu, &headphone, &headtaka) != EOF)
+    while( fscanf ( ptr, "%d %s %d %lld %f", &headid, headname, &headsecu, &headphone, &headtaka) != EOF )
     {
-        head->next = (node *)malloc(sizeof(node));
-        head = head->next;
+        head->next=(node*)malloc(sizeof(node));
+        head=head->next;
 
         head->id_no = headid;
-        strcpy(head->name, headname);
+        strcpy(head->name,headname);
         head->secu = headsecu;
         head->phone = headphone;
         head->taka = headtaka;
+
     }
     head->next = NULL;
 
@@ -759,7 +805,8 @@ int main()
     menu();
 
     return 0;
-} //DONEEEEEEEEEEEEE
+}//DONEEEEEEEEEEEEE
+
 
 void menu2(void)
 {
