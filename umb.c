@@ -415,47 +415,7 @@ void send (int userid)
 
     float transactiontaka=0;
 
-
-
-rsignid:
-
-    printf("\n\n\t\tEnter receiver's ID : ");
-    scanf("%d", &receiverid);
-invname:
-    printf("\n\n\t\tEnter receiver's name : ");
-    scanf("%s", &receivername);
-
-    rsign = root;
-    rsign = rsign->next;
-
-    while (rsign!=NULL)
-    {
-        if (rsign->id_no == receiverid)
-        {
-            if (strcmp(rsign->name, receivername)==0)
-            {
-                break;
-            }
-            else
-            {
-                printf("\n\n\t\tInvalid name!! Try again.");
-                goto invname;
-            }
-        }
-        rsign = rsign->next;
-    }
-
-    if (rsign == NULL)
-    {
-        printf ("\n\t\tID does not exist!!");
-        goto rsignid;
-    }
-
 //======================================================sender upd========================
-
-    printf("\n\n\t\tEnter the amount (BDT) : ");
-    scanf("%f", &transactiontaka);
-
 
     sign = root;
     sign = sign->next;
@@ -464,19 +424,7 @@ invname:
     {
         if (sign->id_no == userid)
         {
-        wpin:
-            printf("\n\n\t\tEnter PIN : ");
-            scanf("%d", &usersecu);
-
-            if (sign->secu == usersecu)
-            {
-                break;
-            }
-            else
-            {
-                printf("\n\n\t\tWrong PIN!! Try again.");
-                goto wpin;
-            }
+            break;
         }
         sign = sign->next;
     }
@@ -488,6 +436,13 @@ invname:
             strcpy(transaction->name, sign->name);
             transaction->secu = sign->secu;
             transaction->phone = sign->phone;
+
+
+            printf("\n\n\t\tEnter the amount (BDT) : ");
+            scanf("%f", &transactiontaka);
+
+
+            transaction->taka = sign->taka - transactiontaka;
 
             if (transactiontaka > sign->taka)
             {
@@ -508,14 +463,10 @@ withd_invalid:
                     goto withd_invalid;
                 }
             }
-            else
-            {
-                transaction->taka = sign->taka - transactiontaka;
-            }
 
 
             ser = root;
-            if (root->next->id_no != sign->id_no )
+            if (sign->id_no != root->next->id_no)
             {
                 ser = ser->next;
             }
@@ -535,15 +486,8 @@ withd_invalid:
             free (temp);
 
     //Addition of the new node to that place
-            if (ser!=NULL)
-            {
-                transaction->next = ser->next;
-                ser->next = transaction;
-            }
-            else if (ser==NULL)
-            {
-                ser->next = transaction;
-            }
+            transaction->next = ser->next;
+            ser->next = transaction;
 
 
     FILE *newrec;
@@ -555,7 +499,7 @@ withd_invalid:
 
         while(use!=NULL)
         {
-            fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+            fprintf(newrec, "%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
 
             use = use->next;
         }
@@ -565,6 +509,20 @@ withd_invalid:
 
 //==================================================================================receiver upd=============================
 
+    printf("\n\n\t\tEnter receiver ID : ");
+    scanf("%d", &receiverid);
+
+    rsign = root;
+    rsign = rsign->next;
+
+    while (rsign!=NULL)
+    {
+        if (rsign->id_no == receiverid)
+        {
+            break;
+        }
+        rsign = rsign->next;
+    }
 
     receiver = (node*)malloc(sizeof(node));
 
@@ -579,7 +537,7 @@ withd_invalid:
 
             ser = root;
 
-            if (root->next->id_no != rsign->id_no )
+            if (rsign->id_no != root->next->id_no)
             {
                 ser = ser->next;
             }
@@ -599,15 +557,8 @@ withd_invalid:
             free (rtemp);
 
     //Addition of the new node to that place
-            if (ser!=NULL)
-            {
-                receiver->next = ser->next;
-                ser->next = receiver;
-            }
-            else if (ser==NULL)
-            {
-                ser->next = receiver;
-            }
+            receiver->next = ser->next;
+            ser->next = receiver;
 
 //replacing the file
     newrec = fopen("new.dat", "a+");
@@ -618,7 +569,7 @@ withd_invalid:
 
         while(use!=NULL)
         {
-            fprintf(newrec, "%d %s %d 0%lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
+            fprintf(newrec, "%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);
             //printf("%d %s %d %lld %f\n", use->id_no, use->name, use->secu, use->phone, use->taka);    to see if the function works
 
             use = use->next;
